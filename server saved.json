@@ -1,0 +1,39 @@
+[
+  {
+    "id": 1,
+    "op": "setTextColor",
+    "invert": false
+  },
+  {
+    "id": 2,
+    "op": "setTextSize",
+    "size": "1"
+  },
+  {
+    "id": 3,
+    "op": "setFont",
+    "font": "Default"
+  },
+  {
+    "id": 4,
+    "op": "setCursor",
+    "x": "5",
+    "y": "17"
+  },
+  {
+    "id": 5,
+    "op": "println",
+    "text": "SERVER:"
+  },
+  {
+    "op": "setCursor",
+    "id": 7,
+    "x": "5",
+    "y": "37"
+  },
+  {
+    "op": "print",
+    "id": 6,
+    "text": "192.168.0.194"
+  }
+]

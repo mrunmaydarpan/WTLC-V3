@@ -1,0 +1,61 @@
+[
+  {
+    "id": 1,
+    "op": "setTextColor",
+    "invert": false
+  },
+  {
+    "id": 2,
+    "op": "setTextSize",
+    "size": "1"
+  },
+  {
+    "id": 3,
+    "op": "setFont",
+    "font": "Default"
+  },
+  {
+    "id": 4,
+    "op": "setCursor",
+    "x": "5",
+    "y": "17"
+  },
+  {
+    "id": 5,
+    "op": "println",
+    "text": "CONNECTED TO"
+  },
+  {
+    "op": "setCursor",
+    "id": 6,
+    "x": "5",
+    "y": "30"
+  },
+  {
+    "op": "print",
+    "id": 7,
+    "text": "XXXXXXXXXXXX"
+  },
+  {
+    "op": "setCursor",
+    "id": 8,
+    "x": "5",
+    "y": "43"
+  },
+  {
+    "op": "print",
+    "id": 9,
+    "text": "XXX.XXX.X.X"
+  },
+  {
+    "op": "drawIcon",
+    "id": 11,
+    "x": "90",
+    "y": "20",
+    "size": "24",
+    "width": 24,
+    "height": 24,
+    "color": "1",
+    "bitmap": "00000000ff0003ff8007c3860f000e1c001c3800383800707000e07001c060c38660e706607e06603c0670180e70000e38001c38001c1c00380f00f007c3e003ffc000ff00000000"
+  }
+]

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<style>
+    button {
+        background-color: rgb(45, 108, 243);
+        width: 100px;
+        color: #ffffff;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    button {
+        width: 30%;
+        height: 44px;
+        border-radius: 4px;
+        margin: 10px auto;
+        font-size: 15px;
+    }
+
+    button {
+        border: 0;
+        padding: 0 15px
+    }
+
+    body {
+        text-align: center;
+        font-family: verdana, sans-serif;
+        border-radius: 5px;
+        background-color: rgb(23, 23, 23);
+        color: rgb(255, 255, 255);
+        padding: 20px;
+    }
+
+    div {
+        border-radius: 5px;
+        /* background-color: rgb(23, 23, 23); */
+        color: #ffffff;
+        padding: 20px;
+    }
+</style>
+
+<head>
+    <title>MDtronix Smart Swtich</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <h1>{{name}}</h1>
+    <div>
+        <form action="/setting">
+            <button>Setting</button>
+        </form><br>
+        <form action="/update">
+            <button>Update</button>
+        </form><br>
+        <form action="/rst">
+            <button>Restart</button>
+        </form><br>
+        <form action="/rstwifi">
+            <button>Reset WiFi</button>
+        </form>
+    </div>
+</body>
+
+</html>

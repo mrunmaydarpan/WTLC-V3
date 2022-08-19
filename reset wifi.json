@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "op": "setTextColor",
+    "invert": false
+  },
+  {
+    "id": 2,
+    "op": "setTextSize",
+    "size": "2"
+  },
+  {
+    "id": 3,
+    "op": "setFont",
+    "font": "Default"
+  },
+  {
+    "id": 4,
+    "op": "setCursor",
+    "x": "5",
+    "y": "17"
+  },
+  {
+    "id": 5,
+    "op": "println",
+    "text": "RESET WIFI"
+  },
+  {
+    "op": "setTextSize",
+    "id": 6,
+    "size": "1"
+  },
+  {
+    "op": "setCursor",
+    "id": 7,
+    "x": "5",
+    "y": "44"
+  },
+  {
+    "op": "print",
+    "id": 8,
+    "text": "WAIT FOR RESTART"
+  }
+]

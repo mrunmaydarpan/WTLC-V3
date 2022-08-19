@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "op": "setTextColor",
+    "invert": false
+  },
+  {
+    "id": 2,
+    "op": "setTextSize",
+    "size": "2"
+  },
+  {
+    "id": 3,
+    "op": "setFont",
+    "font": "Default"
+  },
+  {
+    "id": 4,
+    "op": "setCursor",
+    "x": "5",
+    "y": "23"
+  },
+  {
+    "id": 5,
+    "op": "println",
+    "text": "WIFI SAVED"
+  }
+]
