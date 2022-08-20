@@ -11,6 +11,7 @@ void StartUp()
     Serial.println("MaxDistance: " + String(MaxDistance));
     Serial.println("MinDistance: " + String(MinDistance));
     Serial.println("start at: " + String(MotorStartThreshold));
+    Serial.println("Stator: " + String(STATOR_TYPE));
     Serial.println("ManualOff: " + String(EEPROM.read(manualOff_mem)));
     Serial.println("MotorState: " + String(EEPROM.read(motorState_mem)));
     Serial.println("Mode: " + String(EEPROM.read(AutoMode_mem)));

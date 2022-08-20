@@ -1,4 +1,4 @@
-#include <LittleFS.h>
+// #include <LittleFS.h>
 #include <version.h>
 #include <setting.h>
 
@@ -16,7 +16,6 @@
 #include <ESP8266HTTPUpdateServer.h>
 #include <EspHtmlTemplateProcessor.h>
 #include <DNSServer.h>
-#include <WiFiClient.h>
 #include <ArduinoJson.h>
 #include <ESP8266mDNS.h>
 #if HA_INIT
@@ -61,6 +60,7 @@ Button modeButton(_Mode);
 Timer t;
 Smoothed<uint8_t> mySensor;
 DNSServer dnsServer;
+WiFiClient client;
 ESP8266WebServer server(80);
 EspHtmlTemplateProcessor TP(&server);
 ESP8266HTTPUpdateServer httpUpdater;
@@ -69,7 +69,6 @@ ESP8266HTTPUpdateServer httpUpdater;
 byte mac[WL_MAC_ADDR_LENGTH];
 #endif
 
-WiFiClient client;
 #ifdef WM_SET
 AsyncWiFiManager wm;
 #if HA_INIT

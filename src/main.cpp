@@ -109,6 +109,7 @@ void setup()
   Serial.begin(115200);
   Serial.println();
   Serial.println();
+  LittleFS.begin();
 #if HA_INIT
   if (!LittleFS.begin())
   {
@@ -204,11 +205,6 @@ void loop()
   server.handleClient();
   MDNS.update();
   dnsServer.processNextRequest();
-  if (STATOR_TYPE == 2)
-  {
-    digitalWrite(Relay_ON_2, LOW);
-    digitalWrite(Relay_ON, LOW);
-  }
   if (ManualOff == true)
   {
 #if OLED
