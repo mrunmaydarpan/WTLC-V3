@@ -73,7 +73,6 @@ void WIFI_CONNECT()
 {
     // wm.resetSettings();
 #ifdef WM_SET
-#if OLED
     display.clearDisplay();
     display.setTextColor(WHITE);
     display.setTextSize(2);
@@ -85,10 +84,6 @@ void WIFI_CONNECT()
     display.print("WiFi");
     display.display();
     delay(1000);
-#else
-    lcd.clear();
-    lcd.print("connecting WiFi");
-#endif
 #endif
 #ifdef WM_SET
     WiFi.mode(WIFI_AP_STA);
@@ -103,7 +98,6 @@ void WIFI_CONNECT()
     // wm.setAPCallback(configModeCallback);
     if (wm.autoConnect(device_name)) // if Connected successfully
     {
-#if OLED
         display.clearDisplay();
         display.setTextColor(WHITE);
         display.setTextSize(1);
@@ -128,12 +122,6 @@ void WIFI_CONNECT()
         display.print(BROKER_ADDR);
         display.display();
 #endif
-#else
-        lcd.clear();
-        lcd.print("Connected");
-        lcd.setCursor(0, 1);
-        lcd.print(WiFi.localIP());
-#endif
     }
     else
     { // if not connected
@@ -155,10 +143,6 @@ void WIFI_CONNECT()
     }
     delay(1000);
 
-#if OLED
-#else
-    lcd.clear();
-#endif
 #else
     WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
     WiFi.softAP(device_name);
