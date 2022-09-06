@@ -1,19 +1,3 @@
-void lcdDefault()
-{
-#if OLED
-
-#else
-    lcd.setCursor(0, 0);
-    lcd.print("PUMP:");
-    lcd.setCursor(5, 0);
-    lcd.print(MotorState ? "ON " : "OFF");
-    lcd.setCursor(10, 0);
-    lcd.print(AutoMode ? "  AUTO" : "MANUAL");
-    lcd.setCursor(0, 1);
-    lcd.print("Lv:");
-#endif
-}
-
 void Debug()
 {
     debug("Lv:" + String(value));
@@ -66,15 +50,18 @@ void buttonEvent()
     }
 
     /*-----------------------MODE BUTTON OPERATION------------------------*/
+
     if (modeButton.wasPressed())
     {
         if (AutoMode)
         {
             AutoMode = false;
+            tone(buzz, 4500, 300);
         }
         else
         {
             AutoMode = true;
+            tone(buzz, 4500, 300);
         }
 
 #if HA_INIT
@@ -119,29 +106,13 @@ void OneTimeRun()
 
     if (errorCountState != LasterrorCountState)
     {
-#if OLED
-#else
-        lcd.clear();
-#endif
+
         if (errorCountState == true)
         {
             PumpOFF_command();
             debugln("ERROR");
             ManualOff = true;
             AutoMode = false;
-
-#if OLED
-#else
-            lcd.setCursor(3, 1);
-            if (DryRunState)
-            {
-                lcd.print("DRY-RUN");
-            }
-            else
-            {
-                lcd.print("ERROR");
-            }
-#endif
             EEPROM.write(motorState_mem, 0);
             ledBlink = t.oscillate(led, 500, HIGH);
         }
@@ -156,7 +127,6 @@ void OneTimeRun()
 
 void update_lcd()
 {
-#if OLED
     display.clearDisplay();
     if (errorCountState)
     {
@@ -189,26 +159,7 @@ void update_lcd()
         display.drawBitmap(112, 2, network_icon, 12, 12, 1);
 #endif
     display.display();
-#else
-    if (errorCountState == false)
-    {
-        lcd.setCursor(3, 1);
-        lcd.print(value);
-        lcd.print("%");
-        lcd.print("   ");
-    }
-    lcd.setCursor(15, 1);
-    if (blink_state == true)
-    {
-        blink_state = false;
-        lcd.write(0);
-    }
-    else
-    {
-        lcd.write(1);
-        blink_state = true;
-    }
-#endif
+
 #if HA_INIT
     mode_HA.setState(AutoMode);
     value_HA.setValue(value);

@@ -3,6 +3,12 @@ const char *max_ = "max";
 const char *thres_ = "threshold";
 const char *stator_ = "stator";
 
+// URI Set
+#define HOME_URI "/"
+#define SETTING_URI "/setting"
+#define RESET_URI "/rst"
+#define RESET_WIFI_URI "/rstwifi"
+
 #ifdef WM_SET
 void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager)
 {
@@ -67,7 +73,6 @@ void WIFI_CONNECT()
 {
     // wm.resetSettings();
 #ifdef WM_SET
-#if OLED
     display.clearDisplay();
     display.setTextColor(WHITE);
     display.setTextSize(2);
@@ -79,14 +84,12 @@ void WIFI_CONNECT()
     display.print("WiFi");
     display.display();
     delay(1000);
-#else
-    lcd.clear();
-    lcd.print("connecting WiFi");
-#endif
 #endif
 #ifdef WM_SET
     WiFi.mode(WIFI_AP_STA);
     wm.setConfigPortalBlocking(false);
+    WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+    WiFi.softAP(device_name);
 #if HA_INIT
     wm.setSaveConfigCallback(save_callback);
     wm.setSaveParamsCallback(saveParamsCallback);
@@ -95,7 +98,6 @@ void WIFI_CONNECT()
     // wm.setAPCallback(configModeCallback);
     if (wm.autoConnect(device_name)) // if Connected successfully
     {
-#if OLED
         display.clearDisplay();
         display.setTextColor(WHITE);
         display.setTextSize(1);
@@ -120,12 +122,6 @@ void WIFI_CONNECT()
         display.print(BROKER_ADDR);
         display.display();
 #endif
-#else
-        lcd.clear();
-        lcd.print("Connected");
-        lcd.setCursor(0, 1);
-        lcd.print(WiFi.localIP());
-#endif
     }
     else
     { // if not connected
@@ -147,10 +143,6 @@ void WIFI_CONNECT()
     }
     delay(1000);
 
-#if OLED
-#else
-    lcd.clear();
-#endif
 #else
     WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
     WiFi.softAP(device_name);
@@ -159,30 +151,80 @@ void WIFI_CONNECT()
 
 String home_processor(const String &var)
 {
-    if (var == "name")
+    if (var == "level_req")
+        return String(value);
+    if (var == "rst_wifi_set")
+#ifdef WM_SET
     {
-        return device_name;
+        String s = "";
+        s = "<form action=\"/rstwifi\">";
+        s += "<button class=\"rst\">Reset WiFi</button>";
+        s += "</form>";
+        s += "<br>";
+        return s;
+    }
+#else
+    {
+        return "";
+    }
+#endif
+    return String();
+}
+
+String setting_proccesor(const String &var)
+{
+    if (var == "max_height")
+    {
+        return String(MaxDistance);
+    }
+    if (var == "min_height")
+    {
+        return String(MinDistance);
+    }
+    if (var == "start_at")
+    {
+        return String(MotorStartThreshold);
+    }
+    switch (STATOR_TYPE)
+    {
+    case 1:
+        if (var == "selector_1")
+            return "selected";
+        break;
+    case 2:
+        if (var == "selector_2")
+            return "selected";
+        break;
+    case 3:
+        if (var == "selector_3")
+            return "selected";
+        break;
+    default:
+        break;
     }
     return String();
 }
 
+String css_proccesor(const String &var)
+{
+    return String();
+}
+
+static const char rebootSend[] PROGMEM =
+    "<META http-equiv=\"refresh\" content=\"10;URL=/\">Rebooting...";
+
 void setting_code()
 {
     server.onNotFound([]()
-                      //                   { TP.processAndSend("home.html", home_processor); });
-                      // server.on("/data", HTTP_GET, []()
-                      { 
-                          StaticJsonDocument<200> doc;
-                          doc["level"] = value;
-                          doc["pump"] = MotorState;
-                          doc["mode"] = AutoMode;
-                          String reply;
-                          serializeJsonPretty(doc, reply);
-                          server.send(200, "text/json", reply); });
-    server.on("/setting", HTTP_GET, []()
+                      { TP.processAndSend("home.html", home_processor); });
+    server.on(HOME_URI, HTTP_GET, []()
+              { TP.processAndSend("home.html", home_processor); });
+    server.on("/style.css", HTTP_GET, []()
+              { TP.processAndSend("style.css", css_proccesor); });
+    server.on(SETTING_URI, HTTP_GET, []()
               {
                   debugln("setting pages");
-                  server.send(200, "text/html", "index_html, processor"); });
+                  TP.processAndSend("setting_html.html",setting_proccesor); });
     server.on("/get_setting", HTTP_GET, []()
               {
                   StaticJsonDocument<200> doc;
@@ -208,6 +250,7 @@ void setting_code()
                       max = server.arg(max_).toInt();
                       threshold = server.arg(thres_).toInt();
                       stator = server.arg(stator_).toInt();
+
                       if (min == 0 || max == 0 || threshold == 0)
                       {
                           reply = "error";
@@ -215,19 +258,16 @@ void setting_code()
                       }
                       else if (min < max && threshold <= 70 && threshold >= 20 && stator < 4 && stator != 0)
                       {
-                          StaticJsonDocument<200> doc;
-                          doc["min"] = min;
-                          doc["max"] = max;
-                          doc["threshold"] = threshold;
-                          doc["starter"] = stator;
-                          serializeJsonPretty(doc,reply);
-                          MinDistance = min;
-                          MaxDistance = max;
-                          MotorStartThreshold = threshold;
-                          STATOR_TYPE = stator;
-                          debugln("min: " + min ? min : MinDistance);
-                          server.send(200, "text/plain", reply);
-                       }
+                        EEPROM.write(minDistance_mem, min);
+                        EEPROM.write(maxDistance_mem, max);
+                        EEPROM.write(MotorStartThreshold_mem, threshold);
+                        EEPROM.write(StatorType_mem, stator);
+                        EEPROM.commit();
+                        Serial.print("saved data");
+                        server.send(200, "text/html", rebootSend);
+                        delay(2000);
+                        ESP.restart();
+                      }
                   }
                   else if(server.hasArg("pump")) //control pump from app
                   {
@@ -244,8 +284,21 @@ void setting_code()
                       reply = "No message sent";
                       server.send(202, "text/plain", reply);
                   } });
-
-    // dns.start(DNS_PORT, "*", IPAddress(WiFi.localIP()));
+    server.on(RESET_URI, HTTP_GET, []()
+              { 
+              server.send(200, "text/html", rebootSend);
+              delay(2000);
+              ESP.restart(); });
+#if WM_set
+    server.on(RESET_WIFI_URI, HTTP_GET, []()
+              {
+                server.send(200, "text/html", rebootSend);
+                wm.resetSettings();
+                delay(2000);
+                ESP.restart(); });
+#endif
+    // server.on("get_level", HTTP_GET, []()
+    //           { server.send(200, "text/plain", String(value)); });
     if (!MDNS.begin("mdtronix-wtlc"))
     {
         debugln("Error setting up MDNS responder!");

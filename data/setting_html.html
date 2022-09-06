@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>MDtronix WTLC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <h1>MDtronix WTLC Setting</h1>
+    <div class="wrap">
+        <form action="/set">
+            <label>Tank Height: (in cm)</label><br>
+            <input type="number" name="max" maxlength="20" value={{max_height}}><br>
+            <label>Full Tank Height: (in cm)</label><br>
+            <input type="number" name="min" maxlength="20" value={{min_height}}><br>
+            <label>Strart Motor At: (in %)</label><br>
+            <input type="number" name="threshold" maxlength="20" value={{start_at}}><br>
+            <label>Stator Type:</label><br>
+            <select id="stator" name="stator">
+                <option {{selector_1}} value="1">Basic</option>
+                <option {{selector_2}} value="2">Multi capacitor</option>
+                <option {{selsector_3}} value="3">capacitor Run</option>
+            </select>
+            <button>Save</button>
+        </form>
+        <hr>
+        <form action="/">
+            <button>Home</button>
+        </form>
+    </div>
+</body>
+
+</html>
