@@ -66,15 +66,18 @@ void buttonEvent()
     }
 
     /*-----------------------MODE BUTTON OPERATION------------------------*/
+
     if (modeButton.wasPressed())
     {
         if (AutoMode)
         {
             AutoMode = false;
+            tone(buzz, 4500, 300);
         }
         else
         {
             AutoMode = true;
+            tone(buzz, 4500, 300);
         }
 
 #if HA_INIT
